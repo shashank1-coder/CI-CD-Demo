@@ -1,15 +1,15 @@
 pipeline {
     agent any
     stages {
-        stage('Install Dependencies') {
+        stage('Setup and Test') {
             steps {
-                sh 'pip install -r requirements.txt'
-                sh 'pip install pytest pytest-rerunfailures'
-            }
-        }
-        stage('Run Tests') {
-            steps {
-                sh 'pytest tests/ --reruns 1 --junitxml=report.xml'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                    pip install pytest pytest-rerunfailures
+                    pytest tests/ --reruns 1 --junitxml=report.xml
+                '''
             }
             post {
                 always {
