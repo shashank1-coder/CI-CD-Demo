@@ -5,21 +5,18 @@ pipeline {
             matrix {
                 axes {
                     axis {
-                        name 'PYTHON_VERSION'
-                        values '3.8', '3.9', '3.10'
+                        name 'PYTHON_LABEL'
+                        values 'py38', 'py39', 'py310'
                     }
                 }
                 agent {
-                    docker {
-                        image "python:${PYTHON_VERSION}"
-                        args '-v $PWD:/app -w /app'
-                    }
+                    label "${PYTHON_LABEL}"  // Assumes agents are labeled appropriately
                 }
                 stages {
                     stage('Install Dependencies') {
                         steps {
                             sh 'pip install -r requirements.txt'
-                            sh 'pip install pytest-rerunfailures'
+                            sh 'pip install pytest pytest-rerunfailures'
                         }
                     }
                     stage('Run Tests') {
@@ -36,6 +33,5 @@ pipeline {
                 }
             }
         }
-        
     }
 }
