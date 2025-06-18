@@ -8,6 +8,7 @@ pipeline {
                     . venv/bin/activate
                     pip install -r requirements.txt
                     pip install pytest pytest-rerunfailures
+                    export PYTHONPATH=$PYTHONPATH:$(pwd)
                     pytest tests/ --reruns 1 --junitxml=report.xml
                 '''
             }
